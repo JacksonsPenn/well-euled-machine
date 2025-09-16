@@ -1,41 +1,40 @@
+using Marten;
+using Wolverine;
+using Wolverine.Marten;
+using HotChocolate;
+using HotChocolate.AspNetCore;
+using HotChocolate.Data;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Api.GraphQL;
+using Api.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+// ---------- Marten ----------
+builder.Services.AddMarten(options =>
+{
+    options.Connection(builder.Configuration.GetConnectionString("Default") ??
+                       "Host=localhost;Database=well_euled;Username=postgres;Password=postgres");
+    options.AutoCreateSchemaObjects = Weasel.Core.AutoCreate.All;
+});
+
+// ---------- Wolverine ----------
+builder.Host.UseWolverine();
+
+// ---------- HotChocolate GraphQL ----------
+builder.Services
+    .AddGraphQLServer()
+    .AddQueryType<CalculationQuery>();
+
+// ---------- Other services ----------
+// e.g., Add validation, event handlers, etc.
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-}
+app.MapGraphQL(); // GraphQL endpoint at /graphql
 
-app.UseHttpsRedirection();
-
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
+app.MapGet("/", () => "Well-Euled Machine API is running!");
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
