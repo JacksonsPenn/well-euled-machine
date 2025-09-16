@@ -1,0 +1,7 @@
+# Ignore .NET build outputs
+bin/
+obj/
+# Ignore user secrets and env files
+.env
+# Ignore Docker artifacts
+**/*.log
