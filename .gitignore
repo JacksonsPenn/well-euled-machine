@@ -5,3 +5,5 @@ obj/
 .env
 # Ignore Docker artifacts
 **/*.log
+# Ignore Visual Studio local files
+.vs
