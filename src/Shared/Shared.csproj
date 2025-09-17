@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="StrawberryShake.Transport.Http" Version="15.1.10" />
+  </ItemGroup>
+
 </Project>

@@ -1,14 +1,16 @@
-using Marten;
-using Wolverine;
-using Wolverine.Marten;
+using Api.GraphQL;
+using Api.Models;
+using Api.Services;
+using Api.Services.Abstractions;
 using HotChocolate;
 using HotChocolate.AspNetCore;
 using HotChocolate.Data;
+using Marten;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Api.GraphQL;
-using Api.Models;
+using Wolverine;
+using Wolverine.Marten;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,12 +26,14 @@ builder.Services.AddMarten(options =>
 builder.Host.UseWolverine();
 
 // ---------- HotChocolate GraphQL ----------
+// GraphQL setup
 builder.Services
     .AddGraphQLServer()
-    .AddQueryType<CalculationQuery>();
+    .AddQueryType<Api.GraphQL.Queries.CalculationQuery>()
+    .AddMutationType<Api.GraphQL.Mutations.CalculationMutation>();
 
 // ---------- Other services ----------
-// e.g., Add validation, event handlers, etc.
+builder.Services.AddScoped<ICalculationService, CalculationService>();
 
 var app = builder.Build();
 

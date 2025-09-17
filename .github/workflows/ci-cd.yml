@@ -1,0 +1,71 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      api:
+        image: well-euled-api
+        env:
+          ASPNETCORE_ENVIRONMENT: Development
+        ports:
+          - 5000:80
+        options: >-
+          --health-cmd "curl --fail http://localhost:80/graphql || exit 1"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+        # You may need to build and run your API container with your own image if you have custom code
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Build API Docker image
+        run: docker build -f docker/api.Dockerfile -t well-euled-api .
+      # Then update the 'services' section to use 'well-euled-api' image
+
+      - name: Install StrawberryShake CLI
+        run: dotnet tool install --global StrawberryShake.Tools
+
+      - name: Wait for API to be ready
+        run: |
+          for i in {1..30}; do
+            if curl --fail http://localhost:5000/graphql; then
+              echo "API is up!"
+              break
+            fi
+            echo "Waiting for API..."
+            sleep 2
+          done
+
+      - name: Generate StrawberryShake client
+        run: dotnet strawberry shake init WellEuledClient --namespace WebApp.GraphQL --url http://localhost:5000/graphql --project src/WebApp
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build solution
+        run: dotnet build --configuration Release
+      
+      - name: Commit generated GraphQL client
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git add src/WebApp/WellEuledClient
+          git commit -m "Update StrawberryShake GraphQL client"
+          git push
+
+      # Add additional steps for testing, publishing, or Docker build as needed
