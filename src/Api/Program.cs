@@ -5,6 +5,8 @@ using Api.Services.Abstractions;
 using HotChocolate;
 using HotChocolate.AspNetCore;
 using HotChocolate.Data;
+using ImTools;
+using JasperFx;
 using Marten;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,7 +21,7 @@ builder.Services.AddMarten(options =>
 {
     options.Connection(builder.Configuration.GetConnectionString("Default") ??
                        "Host=localhost;Database=well_euled;Username=postgres;Password=postgres");
-    options.AutoCreateSchemaObjects = Weasel.Core.AutoCreate.All;
+    options.AutoCreateSchemaObjects = AutoCreate.All;
 });
 
 // ---------- Wolverine ----------
