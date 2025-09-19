@@ -2,9 +2,20 @@
 
 <PageTitle>Editor</PageTitle>
 
-<StandaloneCodeEditor />
+Why doesnt this want to work?
+
+<StandaloneCodeEditor Id="my-editor-id" ConstructionOptions="EditorConstructionOptions" />
 
 @code {
-    string value = @"<h1>Hello World!</h1>";
+    private StandaloneEditorConstructionOptions EditorConstructionOptions(StandaloneCodeEditor editor)
+    {
+        return new StandaloneEditorConstructionOptions
+        {
+            AutomaticLayout = true,
+            Language = "javascript",
+            Value = "function xyz() {\n" +
+                    "   console.log(\"Hello world!\");\n" +
+                    "}"
+        };
+    }
 }
-

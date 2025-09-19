@@ -1,12 +1,15 @@
+using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.AspNetCore.Hosting.Server;
+using Microsoft.AspNetCore.Hosting.Server.Features;
+using Microsoft.Extensions.DependencyInjection;
 using Radzen;
+using System;
+using System.Net.Http;
+using WebApp;
 using WebApp.Client.Pages;
 using WebApp.Components;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add Radzen Dialogue service
-builder.Services.AddScoped<DialogService>();
-builder.Services.AddScoped<ThemeService>();
 
 
 // Add services to the container.
@@ -14,7 +17,27 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
 
-builder.AddMudBla
+builder.Services.AddSingleton(sp =>
+{
+    // Get the address that the app is currently running at
+    var server = sp.GetRequiredService<IServer>();
+    var addressFeature = server.Features.Get<IServerAddressesFeature>();
+    string baseAddress = addressFeature.Addresses.First();
+    return new HttpClient { BaseAddress = new Uri(baseAddress) };
+});
+builder.Services.AddDistributedMemoryCache();
+builder.Services.Configure<Microsoft.AspNetCore.Http.Features.FormOptions>(options =>
+{
+    options.MultipartBodyLengthLimit = long.MaxValue;
+});
+
+
+// Add Radzen.Blazor services
+builder.Services.AddRadzenComponents();
+builder.Services.AddRadzenQueryStringThemeService();
+
+builder.Services.AddScoped<CompilerService>();
+
 
 var app = builder.Build();
 
