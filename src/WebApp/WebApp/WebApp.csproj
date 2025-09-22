@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Shared\Common.csproj" />
     <ProjectReference Include="..\WebApp.Client\WebApp.Client.csproj" />
     <PackageReference Include="BlazorMonaco" Version="3.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.20" />
@@ -16,5 +17,5 @@
     <PackageReference Include="Radzen.Blazor" Version="7.3.5" />
 	<PackageReference Include="MetadataReferenceService.BlazorWasm" Version="*" />
   </ItemGroup>
-
+	
 </Project>

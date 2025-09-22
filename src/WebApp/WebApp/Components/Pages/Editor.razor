@@ -1,21 +1,11 @@
 ﻿@page "/editor"
+@using WebApp.Components.Shared
 
 <PageTitle>Editor</PageTitle>
 
-Why doesnt this want to work?
+<h3>Editor</h3>
 
-<StandaloneCodeEditor Id="my-editor-id" ConstructionOptions="EditorConstructionOptions" />
+<Notebook></Notebook>
 
 @code {
-    private StandaloneEditorConstructionOptions EditorConstructionOptions(StandaloneCodeEditor editor)
-    {
-        return new StandaloneEditorConstructionOptions
-        {
-            AutomaticLayout = true,
-            Language = "javascript",
-            Value = "function xyz() {\n" +
-                    "   console.log(\"Hello world!\");\n" +
-                    "}"
-        };
-    }
 }

@@ -1,0 +1,52 @@
+﻿@using Common.Models.Notebook
+
+@code {
+    List<NotebookSection> Sections = new()
+    {
+        new NotebookSection { Content = "## Section 1", Output = "Output 1" },
+        new NotebookSection { Content = "Some math equation...", Output = "Result: 42" }
+    };
+
+    void AddSection()
+    {
+        Sections.Add(new NotebookSection { Content = "", Output = "" });
+        Console.Write("Section Added");
+        StateHasChanged();
+    }
+
+    void RemoveSection(string id)
+    {
+        Sections.RemoveAll(s => s.Id == id);
+        Console.Write("Section Removed");
+        StateHasChanged();
+    }
+
+    void ToggleOutputPosition(NotebookSection section)
+    {
+        section.Position = section.Position == OutputPosition.After ? OutputPosition.Before : OutputPosition.After;
+        Console.Write("Section Toggled");
+        StateHasChanged();
+    }
+}
+
+<div>
+    @foreach (var sectionItem in Sections)
+    {
+        <div class="notebook-section">
+            @if (sectionItem.Position == OutputPosition.Before)
+            {
+                <div class="output">@sectionItem.Output</div>
+            }
+            <textarea @bind="sectionItem.Content"></textarea>
+            <div class="actions">
+                <button @onclick="() => ToggleOutputPosition(sectionItem)">Toggle Output Position</button>
+                <button @onclick="() => RemoveSection(sectionItem.Id)">Delete</button>
+            </div>
+            @if (sectionItem.Position == OutputPosition.After)
+            {
+                <div class="output">@sectionItem.Output</div>
+            }
+        </div>
+    }
+    <button @onclick="AddSection">Add Section</button>
+</div>
