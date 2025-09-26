@@ -36,8 +36,6 @@ builder.Services.Configure<Microsoft.AspNetCore.Http.Features.FormOptions>(optio
 builder.Services.AddRadzenComponents();
 builder.Services.AddRadzenQueryStringThemeService();
 
-builder.Services.AddScoped<CompilerService>();
-
 
 var app = builder.Build();
 

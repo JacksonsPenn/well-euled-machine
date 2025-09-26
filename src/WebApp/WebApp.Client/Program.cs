@@ -3,8 +3,6 @@ using Radzen;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
-builder.Services.AddRadzenComponents();
-
 
 // Add Radzen.Blazor services
 builder.Services.AddRadzenComponents();

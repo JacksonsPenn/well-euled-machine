@@ -10,7 +10,7 @@
     <PackageReference Include="HotChocolate.AspNetCore" Version="15.1.10" />
     <PackageReference Include="HotChocolate.Data" Version="15.1.10" />
     <PackageReference Include="Marten.AspNetCore" Version="8.10.0" />
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.8" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.8" />
     <PackageReference Include="NodaTime" Version="3.2.2" />
     <PackageReference Include="Radzen.Blazor" Version="7.3.5" />
     <PackageReference Include="Serilog" Version="4.3.0" />

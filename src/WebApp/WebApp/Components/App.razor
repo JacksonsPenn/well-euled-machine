@@ -9,11 +9,13 @@
     <link rel="stylesheet" href="app.css" />
     <link rel="stylesheet" href="WebApp.styles.css" />
     <link rel="icon" type="image/png" href="favicon.png" />
+    <RadzenTheme Theme="material" />
     <HeadOutlet />
     
 </head>
 
 <body>
+    <RadzenComponents @rendermode="InteractiveAuto" />
     <Routes />
     <script src="_framework/blazor.web.js"></script>
     <script src="_content/Radzen.Blazor/Radzen.Blazor.js"></script>
@@ -21,22 +23,8 @@
     <script src="_content/BlazorMonaco/jsInterop.js"></script>
     <script src="_content/BlazorMonaco/lib/monaco-editor/min/vs/loader.js"></script>
     <script src="_content/BlazorMonaco/lib/monaco-editor/min/vs/editor/editor.main.js"></script>
-    <script>
-        var instances = {};
-        function createEditor(element, id, ref, options) {
-            var instance = monaco.editor.create(element, options);
-            instance.onDidChangeModelContent(function () {
-                ref.invokeMethodAsync('OnChangeAsync', instance.getValue());
-            });
-            instances[id] = instance;
-            return instance;
-        }
 
-        function copy(id) {
-            var text = instances[id].getValue();
-            navigator.clipboard.writeText(text);
-        }
-    </script>
+    <script src="_content/Radzen.Blazor/Radzen.Blazor.js?v=@(typeof(Radzen.Colors).Assembly.GetName().Version)"></script>
 </body>
 
 </html>
