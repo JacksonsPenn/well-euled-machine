@@ -23,16 +23,19 @@ jobs:
 
       - name: Run API container
         run: |
-          docker run -d --name api -p 5000:5000 well-euled-api
-          # Wait until API is healthy
-          for i in {1..30}; do
-            if curl --fail http://localhost:5000/graphql; then
-              echo "API is up!"
-              break
-            fi
-            echo "Waiting for API..."
-            sleep 2
-          done
+            docker run -d --name api \
+                -e ASPNETCORE_URLS=http://+:5000 \
+                -e DOTNET_USE_POLLING_FILE_WATCHER=1 \
+                -p 5000:5000 well-euled-api
+            # Wait until API is healthy
+            for i in {1..30}; do
+                if curl --fail http://localhost:5000/graphql; then
+                    echo "API is up!"
+                    break
+                fi
+                echo "Waiting for API..."
+                sleep 2
+            done
 
       - name: Install StrawberryShake CLI
         run: dotnet tool install --global StrawberryShake.Tools
