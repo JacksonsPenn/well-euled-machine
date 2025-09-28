@@ -51,8 +51,7 @@ jobs:
       - name: Generate StrawberryShake client
         run: |
           cd src/BlazorApp/BlazorApp
-          dotnet graphql init http://localhost:5000/graphql -n WellEuledClient \
-            --path .
+          dotnet graphql init http://localhost:5000/graphql -n WellEuledClient
 
       # Commit generated client
       - name: Commit generated GraphQL client
