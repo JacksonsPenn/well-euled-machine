@@ -2,15 +2,17 @@ version: "3.9"
 services:
   webapp:
     build:
-      context: .
+      context: ../
       dockerfile: docker/webapp.Dockerfile
     ports:
       - "8080:80"
     depends_on:
       - api
+    networks:
+      - backend
   api:
     build:
-      context: .
+      context: ../
       dockerfile: docker/api.Dockerfile
     ports:
       - "5000:5000"
@@ -19,6 +21,17 @@ services:
       - ConnectionStrings__Default=Host=db;Database=well_euled;Username=postgres;Password=postgres
     depends_on:
       - db
+      - jupytergap
+    networks:
+      - backend
+  jupytergap:
+    build:
+        context: .
+        dockerfile: jupytergap.Dockerfile 
+    ports:
+      - "8888"
+    networks:
+      - backend
   db:
     image: postgres:16
     ports:
@@ -31,3 +44,7 @@ services:
       - well_euled_data:/var/lib/postgresql/data
 volumes:
   well_euled_data:
+
+networks:
+  backend:
+    driver: bridge  

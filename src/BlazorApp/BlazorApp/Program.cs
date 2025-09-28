@@ -1,6 +1,7 @@
-using MudBlazor.Services;
 using BlazorApp.Client.Pages;
 using BlazorApp.Components;
+using BlazorApp.Services;
+using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,13 @@ builder.Services.AddMudServices();
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
+
+builder.Services.AddScoped<GapApiService>();
+
+builder.Services
+    .AddHttpClient("GraphQLClient", c => c.BaseAddress = new Uri("https://your-api-host/graphql"))
+    .AddGraphQLClient();
+
 
 var app = builder.Build();
 

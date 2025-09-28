@@ -1,4 +1,7 @@
 ﻿@page "/counter"
+@inject IMutationClient Mutations
+
+var result = await Mutations.ExecuteGap.ExecuteAsync("Size(SymmetricGroup(4));");
 
 
 <PageTitle>Counter</PageTitle>
@@ -10,6 +13,29 @@
 <MudButton Color="Color.Primary" Variant="Variant.Filled" @onclick="IncrementCount">Click me</MudButton>
 
 <StandaloneCodeEditor Id="my-code-editor" ConstructionOptions="EditorConstructionOptions" />
+
+<h3>GAP Executor</h3>
+
+<textarea @bind="Code" rows="4" cols="60"></textarea>
+<br />
+<button @onclick="RunCode">Run</button>
+
+@if (Result != null)
+{
+    <p><b>Output:</b> @Result</p>
+}
+
+@code {
+    private string Code = "Size(SymmetricGroup(4));";
+    private string? Result;
+
+    private async Task RunCode()
+    {
+        Result = await GapService.ExecuteAsync(Code);
+    }
+}
+
+
 
 @code {
     private StandaloneEditorConstructionOptions EditorConstructionOptions(StandaloneCodeEditor editor)

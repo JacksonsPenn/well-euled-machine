@@ -10,6 +10,7 @@ using Api.Models.Enums;
 
 namespace Api.GraphQL.Mutations;
 
+[MutationType]
 public class CalculationMutation
 {
     public async Task<AlgebraCalculation> SubmitCalculation(
