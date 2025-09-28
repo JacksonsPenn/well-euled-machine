@@ -60,6 +60,7 @@ jobs:
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
-          git add src/BlazorApp/BlazorApp/WellEuledClient
+          git add src/BlazorApp/BlazorApp/schema.extensions.graphql
+          git add src/BlazorApp/BlazorApp/schema.graphql
           git commit -m "Update StrawberryShake GraphQL client" || echo "No changes to commit"
           git push || echo "Push failed, likely due to no changes"
