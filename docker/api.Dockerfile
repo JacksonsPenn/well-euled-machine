@@ -5,10 +5,14 @@ EXPOSE 5000
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
-COPY src/Api/ .
-RUN dotnet publish -c Release -o /app
+
+COPY src/Api/ ./Api
+WORKDIR /src/Api
+
+RUN dotnet restore Api.csproj
+RUN dotnet publish Api.csproj -c Release -o /app
 
 FROM base AS final
 WORKDIR /app
-COPY --from=build /app .
+COPY --from=build /app ./
 ENTRYPOINT ["dotnet", "Api.dll"]

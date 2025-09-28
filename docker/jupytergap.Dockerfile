@@ -1,5 +1,7 @@
 FROM python:3.11-slim
 
+WORKDIR /app
+
 # Install system dependencies for GAP kernel
 RUN apt-get update && apt-get install -y wget gap
 

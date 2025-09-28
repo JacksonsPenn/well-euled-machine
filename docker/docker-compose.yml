@@ -1,15 +1,28 @@
 version: "3.9"
+
+
+networks:
+  backend:
+    driver: bridge  
+
+
+
 services:
   webapp:
     build:
       context: ../
       dockerfile: docker/webapp.Dockerfile
     ports:
-      - "8080:80"
+      - "8080:8080"
     depends_on:
       - api
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:8080
     networks:
       - backend
+    restart: always
+
   api:
     build:
       context: ../
@@ -17,21 +30,26 @@ services:
     ports:
       - "5000:5000"
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__Default=Host=db;Database=well_euled;Username=postgres;Password=postgres
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:5000
+      ConnectionStrings__DefaultConnection: "Host=db;Database=well_euled;Username=postgres;Password=postgres"
+      JupyterGap__Url: "http://jupytergap:8888"
     depends_on:
       - db
       - jupytergap
     networks:
       - backend
+    restart: always
+
   jupytergap:
     build:
         context: .
         dockerfile: jupytergap.Dockerfile 
     ports:
-      - "8888"
+      - "8888:8888"
     networks:
       - backend
+    restart: always
   db:
     image: postgres:16
     ports:
@@ -42,9 +60,7 @@ services:
       POSTGRES_DB: well_euled
     volumes:
       - well_euled_data:/var/lib/postgresql/data
+    networks:
+        - backend
 volumes:
   well_euled_data:
-
-networks:
-  backend:
-    driver: bridge  

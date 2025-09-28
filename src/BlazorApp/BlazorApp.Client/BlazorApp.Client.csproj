@@ -16,16 +16,6 @@
     <PackageReference Include="StrawberryShake.Transport.Http" Version="15.1.10" />
   </ItemGroup>
 
-  <ItemGroup>
-	<GraphQLClient Include="MyGraphQLClient">
-		<Namespace>BlazorApp.GraphQL</Namespace>
-		<Url>https://localhost:5001/graphql</Url>
-		<OutputDirectory>GraphQLClient</OutputDirectory>
-	</GraphQLClient>
-  </ItemGroup>
-
-  <Target Name="GenerateGraphQLClient" BeforeTargets="Build">
-	<Exec Command="dotnet graphql generate" />
-  </Target>
+  
 
 </Project>
