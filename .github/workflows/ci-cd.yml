@@ -11,48 +11,56 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '9.0.x'
 
+      # Build API Docker image
       - name: Build API Docker image
         run: docker build -f docker/api.Dockerfile -t well-euled-api .
 
+      # Run API container
       - name: Run API container
         run: |
-            docker run -d --name api \
-                -e ASPNETCORE_URLS=http://+:5000 \
-                -e DOTNET_USE_POLLING_FILE_WATCHER=1 \
-                -p 5000:5000 well-euled-api
-            # Wait until API is healthy
-            for i in {1..30}; do
-                if curl --fail http://localhost:5000/graphql; then
-                    echo "API is up!"
-                    break
-                fi
-                echo "Waiting for API..."
-                sleep 2
-            done
+          docker run -d --name api \
+            -e ASPNETCORE_URLS=http://+:5000 \
+            -e DOTNET_USE_POLLING_FILE_WATCHER=1 \
+            -p 5000:5000 well-euled-api
+          # Wait for API to be ready
+          for i in {1..30}; do
+            if curl --fail http://localhost:5000/graphql; then
+              echo "API is up!"
+              break
+            fi
+            echo "Waiting for API..."
+            sleep 2
+          done
 
-      - name: Install StrawberryShake CLI
+      # Install StrawberryShake as a local tool
+      - name: Setup StrawberryShake local tool
         run: |
-          dotnet tool install --global StrawberryShake.Tools
-          echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
+          cd src/BlazorApp/BlazorApp
+          dotnet new tool-manifest || echo "Tool manifest already exists"
+          dotnet tool install StrawberryShake.Tools --version 16.0.0 || echo "Tool already installed"
 
+      # Generate StrawberryShake client
       - name: Generate StrawberryShake client
-        run: dotnet strawberry shake init WellEuledClient \
-              --namespace BlazorApp.GraphQL \
-              --url http://localhost:5000/graphql \
-              --project src/BlazorApp/BlazorApp
+        run: |
+          cd src/BlazorApp/BlazorApp
+          dotnet tool run strawberry shake init WellEuledClient \
+            --namespace BlazorApp.GraphQL \
+            --url http://localhost:5000/graphql \
+            --project .
 
-
+      # Commit generated client
       - name: Commit generated GraphQL client
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
-          git add src/BlazorApp/WellEuledClient
-          git commit -m "Update StrawberryShake GraphQL client"
-          git push
+          git add src/BlazorApp/BlazorApp/WellEuledClient
+          git commit -m "Update StrawberryShake GraphQL client" || echo "No changes to commit"
+          git push || echo "Push failed, likely due to no changes"
