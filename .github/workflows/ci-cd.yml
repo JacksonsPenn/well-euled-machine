@@ -38,14 +38,16 @@ jobs:
             done
 
       - name: Install StrawberryShake CLI
-        run: dotnet tool install --global StrawberryShake.Tools
-        env:
-          PATH: $HOME/.dotnet/tools:$PATH
+        run: |
+          dotnet tool install --global StrawberryShake.Tools
+          echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
 
       - name: Generate StrawberryShake client
-        run: dotnet strawberry shake init WellEuledClient --namespace BlazorApp.GraphQL --url http://localhost:5000/graphql --project src/BlazorApp/BlazorApp
-        env:
-          PATH: $HOME/.dotnet/tools:$PATH
+        run: dotnet strawberry shake init WellEuledClient \
+              --namespace BlazorApp.GraphQL \
+              --url http://localhost:5000/graphql \
+              --project src/BlazorApp/BlazorApp
+
 
       - name: Commit generated GraphQL client
         run: |
