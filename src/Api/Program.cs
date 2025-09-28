@@ -34,7 +34,7 @@ builder.Host.UseWolverine();
 // GraphQL setup
 builder.Services
     .AddGraphQLServer()
-    .ModifyOptions(opt => opt.EnableDirectiveIntrospection = true)
+    .DisableIntrospection(!(builder.Environment.IsDevelopment()))
     .AddApiTypes();
 
 // ---------- Other services ----------
