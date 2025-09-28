@@ -45,7 +45,7 @@ jobs:
         run: |
           cd src/BlazorApp/BlazorApp
           dotnet new tool-manifest || echo "Tool manifest already exists"
-          dotnet tool install StrawberryShake.Tools --version 16.0.0 || echo "Tool already installed"
+          dotnet tool install StrawberryShake.Tools --version 15.1.10 || echo "Tool already installed"
 
       # Generate StrawberryShake client
       - name: Generate StrawberryShake client
