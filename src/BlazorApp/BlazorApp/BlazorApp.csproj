@@ -10,6 +10,7 @@
   <ItemGroup>
 	<ProjectReference Include="..\..\Shared\Common.csproj" />
 	  <PackageReference Include="BlazorMonaco" Version="3.3.0" />
+	  <PackageReference Include="StrawberryShake.Blazor" Version="15.1.10" />
     <ProjectReference Include="..\BlazorApp.Client\BlazorApp.Client.csproj" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="9.*" />
   </ItemGroup>

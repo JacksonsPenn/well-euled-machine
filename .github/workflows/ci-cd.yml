@@ -43,14 +43,14 @@ jobs:
       # Install StrawberryShake as a local tool
       - name: Setup StrawberryShake local tool
         run: |
-          cd src/BlazorApp/BlazorApp
+          cd src/BlazorApp/BlazorApp.Client
           dotnet new tool-manifest || echo "Tool manifest already exists"
           dotnet tool install StrawberryShake.Tools --version 15.1.10 || echo "Tool already installed"
 
       # Generate StrawberryShake client
       - name: Generate StrawberryShake client
         run: |
-          cd src/BlazorApp/BlazorApp
+          cd src/BlazorApp/BlazorApp.Client
           dotnet graphql init http://localhost:5000/graphql -n WellEuledClient || echo "Already initialized"
           dotnet graphql update
           ls
@@ -60,8 +60,8 @@ jobs:
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
-          git add src/BlazorApp/BlazorApp/schema.extensions.graphql
-          git add src/BlazorApp/BlazorApp/schema.graphql
-          git add src/BlazorApp/BlazorApp/.graphqlrc.json
+          git add src/BlazorApp/BlazorApp.Client/schema.extensions.graphql
+          git add src/BlazorApp/BlazorApp.Client/schema.graphql
+          git add src/BlazorApp/BlazorApp.Client/.graphqlrc.json
           git commit -m "Update StrawberryShake GraphQL client" || echo "No changes to commit"
           git push || echo "Push failed, likely due to no changes"

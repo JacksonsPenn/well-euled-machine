@@ -4,6 +4,7 @@
   "extensions": {
     "strawberryShake": {
       "name": "WellEuledClient",
+      "namespace": "BlazorApp.GraphQL",
       "url": "http://localhost:5000/graphql",
       "records": {
         "inputs": false,
