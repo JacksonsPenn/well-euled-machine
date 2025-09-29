@@ -1,4 +1,4 @@
-﻿query GetAssets {
+﻿query FindCaculations {
   calculations() {
 	id
   }

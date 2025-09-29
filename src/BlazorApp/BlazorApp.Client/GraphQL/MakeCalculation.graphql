@@ -1,0 +1,6 @@
+﻿mutation ExecuteGap($executeGapInput: ExecuteGapInput!) {
+	executeGap(input: $executeGapInput) {
+		output
+		error
+	  }
+}

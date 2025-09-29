@@ -3,7 +3,7 @@ using BlazorApp.Components;
 using BlazorApp.Services;
 using MudBlazor.Services;
 using BlazorApp;
-using BlazorApp.GraphQL;
+//using BlazorApp.GraphQL;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,7 +20,7 @@ builder.Services.AddScoped<GapApiService>();
 builder.Services
     .AddHttpClient("GraphQLClient", c => c.BaseAddress = new Uri("https://localhost:5000/graphql"));
 
-builder.Services.AddWellEuledClient();
+//builder.Services.AddWellEuledClient();
 
 
 var app = builder.Build();

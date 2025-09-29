@@ -1,8 +1,6 @@
 ﻿@page "/counter"
-
-
-var result = await Mutations.ExecuteGap.ExecuteAsync("Size(SymmetricGroup(4));");
-
+@using StrawberryShake
+@inject ExecuteGapMutation
 
 <PageTitle>Counter</PageTitle>
 
@@ -12,11 +10,17 @@ var result = await Mutations.ExecuteGap.ExecuteAsync("Size(SymmetricGroup(4));")
 
 <MudButton Color="Color.Primary" Variant="Variant.Filled" @onclick="IncrementCount">Click me</MudButton>
 
-<StandaloneCodeEditor Id="my-code-editor" ConstructionOptions="EditorConstructionOptions" />
 
 
+<StandaloneCodeEditor @ref="_editor" Id="my-code-editor" ConstructionOptions="EditorConstructionOptions" />
+
+<MudButton Color="Color.Primary" Variant="Variant.Filled" @onclick="RunGapCode">Submit Code</MudButton>
+
+<MudText Class="mb-4">Output: "@output"</MudText>
+<MudText Class="mb-4">Error: "@error"</MudText>
 
 @code {
+    private StandaloneCodeEditor? _editor;
     private StandaloneEditorConstructionOptions EditorConstructionOptions(StandaloneCodeEditor editor)
     {
         return new StandaloneEditorConstructionOptions
@@ -27,6 +31,27 @@ var result = await Mutations.ExecuteGap.ExecuteAsync("Size(SymmetricGroup(4));")
                     "   console.log(\"Hello world!\");\n" +
                     "}"
         };
+    }
+
+    private string output = string.Empty;
+    private string error = string.Empty;
+
+    private async Task RunGapCode()
+    {
+        var result = await ExecuteGapMuation.ExecuteAsync(new ExecuteGapInput() {
+            Code = await _editor!.GetValue()
+        });
+
+        if (result.IsSuccessResult())
+        {
+            output = result.Data!.ExecuteGap!.Output!;
+            error = string.Empty;
+        }
+        else
+        {
+            output = string.Empty;
+            error = string.Join(", ", result.Errors!.Select(e => e.Message));
+        }
     }
 }
 

@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <GraphQL Remove="GraphQL\MakeCalculation.graphql" />
+  </ItemGroup>
+
+  <ItemGroup>
 	<ProjectReference Include="..\..\Shared\Common.csproj" />
 	<PackageReference Include="BlazorMonaco" Version="3.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="9.*" />

@@ -1,9 +1,10 @@
 {
   "schema": "schema.graphql",
-  "documents": "**/*.graphql",
+  "documents": "**/GraphQL/*.graphql",
   "extensions": {
     "strawberryShake": {
       "name": "WellEuledClient",
+      "namespace": "BlazorApp.Client.GraphQL",
       "url": "http://localhost:5000/graphql",
       "records": {
         "inputs": false,
