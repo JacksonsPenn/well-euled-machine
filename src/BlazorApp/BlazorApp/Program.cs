@@ -16,8 +16,7 @@ builder.Services.AddRazorComponents()
 builder.Services.AddScoped<GapApiService>();
 
 builder.Services
-    .AddHttpClient("GraphQLClient", c => c.BaseAddress = new Uri("https://your-api-host/graphql"));
-    //.AddGraphQLClient();
+    .AddHttpClient("GraphQLClient", c => c.BaseAddress = new Uri("https://localhost:5000/graphql"));
 
 
 var app = builder.Build();
